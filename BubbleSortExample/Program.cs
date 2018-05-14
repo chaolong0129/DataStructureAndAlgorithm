@@ -14,6 +14,11 @@ namespace BubbleSortExample
             System.Console.WriteLine ($"Original Array<{max}> : \t{string.Join("|", arrays)}");
             BubbleSort.Sort (arrays);
             System.Console.WriteLine ($"After Array<{max}> : \t{string.Join("|", arrays)}");
+
+            Init_Array_Values(arrays);
+            System.Console.WriteLine ($"Original Array<{max}> : \t{string.Join("|", arrays)}");
+            BubbleSort.Sort2 (arrays);
+            System.Console.WriteLine ($"After Array<{max}> : \t{string.Join("|", arrays)}");
         }
 
         private static void Init_Array_Values (int[] arrays) {
