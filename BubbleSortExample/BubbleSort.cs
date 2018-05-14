@@ -10,7 +10,7 @@ namespace BubbleSortExample {
             }
         }
 
-        public static void Sort2<T> (T[] array) where T : IComparable {
+        public static void Sort2<T> (T[] array) where T : IComparable<T> {
             for (int i = 0; i < array.Length; i++) {
                 Boolean isFund = false;
                 for (int j = 0; j < array.Length - 1; j++) {
