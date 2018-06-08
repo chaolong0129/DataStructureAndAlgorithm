@@ -24,6 +24,42 @@ namespace BasicTree
             };
 
 
+            Tree<Person> company = new Tree<Person>();
+
+            company.Root = new TreeNode<Person>() {
+                Data = new Person { Id = 0, Name = "Robert", Role = "Manager" },
+                Parent = null
+            };
+
+            company.Root.Children = new List<TreeNode<Person>> {
+                new TreeNode<Person>{
+                    Data = new Person { Id = 1, Name = "R2", Role = "PM" },
+                    Parent = company.Root
+                },
+                new TreeNode<Person>{
+                    Data = new Person { Id = 2, Name = "R3", Role = "Senior Engineer"},
+                    Parent = company.Root
+                },
+                new TreeNode<Person>{
+                    Data = new Person { Id = 3, Name = "R4", Role = "Engineer"},
+                    Parent = company.Root
+                },
+                new TreeNode<Person>{
+                    Data = new Person { Id = 4, Name = "R5", Role = "Juior Engineer"},
+                    Parent = company.Root
+                },
+            };
+
+            company.Root.Children[0].Children = new List<TreeNode<Person>> {
+                new TreeNode<Person> {
+                    Data = new Person { Id = 5, Name = "Liz", Role = "Sales"},
+                    Parent = company.Root.Children[0]
+                }
+            };
+
+
+
+
         }
     }
 }
