@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using RestSharp;
 using System.Net;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace RestSharpExample
 {
@@ -10,28 +11,47 @@ namespace RestSharpExample
     {
         private IRestClient Client;
         private IRestRequest request;
-        private List<string> Stock;
-        public List<string> StockInfo {
-            get { return (Stock.Count !=0 ) ? Stock : null; }
+        private Stock stock;
+        private string Sno;
+        private long Time;
+        public Stock StockInfo {
+            get { return stock ?? null; }
         }
 
         public bool IsSuccess { get; private set; }
 
-        public NetworkCommunicationService(string url)
+        public NetworkCommunicationService(string url, string stockNo, long time)
         {
-            this.Client = new RestClient(url);
+            this.Client = new RestClient()
+            {
+                BaseUrl = new Uri(url),
+                UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36"
+            };
+        
             request = new RestRequest();
-            Stock = new List<string>();
+            Sno = stockNo;
+            Time = time;
+        }
+
+        public void SetUrl(string url)
+        {
+            Console.WriteLine(url);
+            this.Client.BaseUrl = new Uri(url);
+            IsSuccess = false;
         }
 
         private void HttpGetResponse(IRestResponse resp, RestRequestAsyncHandle handle)
         {
             if (resp.StatusCode == HttpStatusCode.OK)
             {
-                Stock.Add(resp.Content);
-                IsSuccess = true;
+                DocParser doc = new DocParser();
+                var sinfo = doc.GetStackInfo(resp.Content);
+                if (sinfo != null)
+                {
+                    stock = new Stock() { Num = Sno, Info = sinfo };
+                    IsSuccess = true;
+                }
             }
-                
             handle.Abort();
         }
 
@@ -39,6 +59,7 @@ namespace RestSharpExample
         {
             if (Client == null)
                 return;
+            request = new RestRequest();
             request.Method = Method.GET;
             ExecuteGetAsync(request).Wait();
         }
